@@ -1,11 +1,17 @@
 package com.samanuel.auth_api.model;
 
 import jakarta.persistence.*;
-import com.samanuel.model.Session;
+import com.samanuel.auth_api.model.Session;
+import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(name = "users")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

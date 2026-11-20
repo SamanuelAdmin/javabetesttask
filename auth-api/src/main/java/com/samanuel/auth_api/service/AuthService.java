@@ -4,6 +4,6 @@ import com.samanuel.auth_api.entity.AuthEntity;
 
 
 public interface AuthService {
-  String login(AuthEntity authEntity);
+  String login(AuthEntity authEntity) throws Exception;
   void register(AuthEntity authEntity);
 }

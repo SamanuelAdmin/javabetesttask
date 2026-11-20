@@ -1,17 +1,22 @@
 package com.samanuel.auth_api.service.impl;
 
 import java.util.UUID;
+
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import com.samanuel.auth_api.service.AuthService;
-import com.samanuel.auth_api.repository.UserRepository;
-import com.samanuel.auth_api.repository.SessionRepository;
-import com.samanuel.auth_api.model.User;
+
+import com.samanuel.auth_api.entity.AuthEntity;
 import com.samanuel.auth_api.model.Session;
+import com.samanuel.auth_api.model.User;
+import com.samanuel.auth_api.repository.SessionRepository;
+import com.samanuel.auth_api.repository.UserRepository;
+import com.samanuel.auth_api.service.AuthService;
 
 
+@Service
 public class AuthServiceImpl implements AuthService {
-  private final UserRepository userRepository;
-  private final SessionRepository sessionRepository;
+  private UserRepository userRepository;
+  private SessionRepository sessionRepository;
 
   static public String hashPassword(String rawPassword) {
     return BCrypt.hashpw(rawPassword, BCrypt.gensalt());
@@ -22,36 +27,35 @@ public class AuthServiceImpl implements AuthService {
   }
   
 
-  public AuthController(UserRepository userRepository, SessionRepository sessionRepository) {
-    this.repository = repository;
+  public void AuthController(UserRepository userRepository, SessionRepository sessionRepository) {
+    this.userRepository = userRepository;
+    this.sessionRepository = sessionRepository;
   }
 
-  public String login(AuthEntity authEntity) {
-    User user = this.userRepository.findByEmail(authEntity.email);
+  public String login(AuthEntity authEntity) throws Exception {
+    User user = this.userRepository.findByEmail(authEntity.getEmail());
 
-    if (!checkPassword(authEntity.password, user.hpass)) {
+    if (!checkPassword(authEntity.getPassword(), user.getHpass())) {
       throw new Exception("Passwords didnt match");
     }
 
-    if (user.session != null) {
-      return user.session.token;
+    if (user.getSession() != null) {
+      return user.getSession().getToken();
     } else {
-      Session new_session = new Session(
-        UUID.randomUUID().toString(),
-      );
+      Session newSession = new Session();
+      newSession.setToken(UUID.randomUUID().toString());
 
-      user.setSession(new_session);
+      user.setSession(newSession);
 
-      this.sessionRepository.save(new_session);
-      return new_session.token;
+      this.sessionRepository.save(newSession);
+      return newSession.getToken();
     }
   }
 
   public void register(AuthEntity authEntity) {
-    User newUser = new User(
-      authEntity.email,
-      authEntity.password
-    );
+    User newUser = new User();
+    newUser.setEmail(authEntity.getEmail());
+    newUser.setHpass(authEntity.getPassword());
 
     this.userRepository.save(newUser);
   }

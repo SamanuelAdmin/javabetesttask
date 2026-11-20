@@ -1,9 +1,9 @@
-package com.samanuel.api_auth.entity;
+package com.samanuel.auth_api.entity;
 
-import lombol.Data;
+import lombok.Data;
+import lombok.AllArgsConstructor;
 
-@Data
-public class ResponseContract {
-  private int status;
+@Data @AllArgsConstructor public class ResponseContract {
+  private Integer status;
   private String message;
 }

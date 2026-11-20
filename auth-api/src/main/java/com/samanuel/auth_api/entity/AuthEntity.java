@@ -1,9 +1,10 @@
-package com.samanuel.api_auth.entity;
+package com.samanuel.auth_api.entity;
 
-import lombol.Data;
+import lombok.Data;
+import lombok.AllArgsConstructor;
 
-@Data
-public class AuthEntity {
+
+@Data @AllArgsConstructor public class AuthEntity {
   private String email;
-  private String password
+  private String password;
 }
