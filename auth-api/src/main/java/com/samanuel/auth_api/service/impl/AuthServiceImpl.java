@@ -11,11 +11,14 @@ import com.samanuel.auth_api.model.User;
 import com.samanuel.auth_api.repository.SessionRepository;
 import com.samanuel.auth_api.repository.UserRepository;
 import com.samanuel.auth_api.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Service
 public class AuthServiceImpl implements AuthService {
+  @Autowired
   private UserRepository userRepository;
+  @Autowired
   private SessionRepository sessionRepository;
 
   static public String hashPassword(String rawPassword) {
@@ -35,6 +38,8 @@ public class AuthServiceImpl implements AuthService {
   public String login(AuthEntity authEntity) throws Exception {
     User user = this.userRepository.findByEmail(authEntity.getEmail());
 
+    System.out.println(user);
+    System.out.println(authEntity);
     if (!checkPassword(authEntity.getPassword(), user.getHpass())) {
       throw new Exception("Passwords didnt match");
     }
@@ -52,11 +57,24 @@ public class AuthServiceImpl implements AuthService {
     }
   }
 
+
   public void register(AuthEntity authEntity) {
     User newUser = new User();
     newUser.setEmail(authEntity.getEmail());
-    newUser.setHpass(authEntity.getPassword());
+    newUser.setHpass(
+      this.hashPassword(
+        authEntity.getPassword()
+      )
+    );
 
     this.userRepository.save(newUser);
+  }
+
+  
+  public User checkSession(String token) {
+    // will throw exeption if not found
+    Session session = this.sessionRepository.findByToken(token);
+
+    // TODO: Add timestamp and exp time checker
   }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 
 
 @RestController
@@ -28,10 +29,16 @@ public class AuthController {
 
   @PostMapping("/register")
   public ResponseContract register(@RequestBody AuthEntity authEntity) {
-    authService.register(authEntity);
+    try {
+      authService.register(authEntity);
 
-    System.out.println("Hello");
-    return new ResponseContract(201, "OK");
+      return new ResponseContract(201, "OK");
+    } catch (DataIntegrityViolationException e) {
+      System.err.println("Error while adding new user: \n");
+      System.err.println(e);
+
+      return new ResponseContract(400, "This email is already used.");
+    }
   }
 
   @PostMapping("/login")
@@ -41,6 +48,9 @@ public class AuthController {
     try {
       token = authService.login(authEntity);
     } catch (Exception e) {
+      System.err.println("Error while login in: \n");
+      System.err.println(e);
+
       return new ResponseContract(
         403, "Incorrect"
       );
