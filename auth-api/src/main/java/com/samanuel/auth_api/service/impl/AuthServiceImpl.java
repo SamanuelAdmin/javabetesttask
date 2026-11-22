@@ -12,6 +12,7 @@ import com.samanuel.auth_api.repository.SessionRepository;
 import com.samanuel.auth_api.repository.UserRepository;
 import com.samanuel.auth_api.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Date;
 
 
 @Service
@@ -49,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
     } else {
       Session newSession = new Session();
       newSession.setToken(UUID.randomUUID().toString());
+      newSession.setExpiration(120);
 
       user.setSession(newSession);
 
@@ -71,11 +73,18 @@ public class AuthServiceImpl implements AuthService {
   }
 
   
-  public User checkSession(String token) {
+  public User checkSession(String token) throws Exception {
     // will throw exeption if not found
     Session session = this.sessionRepository.findByToken(token);
+    if (session == null) {
+      throw new Exception("Session not found");
+    }
 
-    // TODO: Add timestamp and exp time checker
+    long nowTime = (new Date()).getTime();
+    if (session.getExpirationTime() < nowTime) {
+      throw new Exception("Session has been expired");
+    }
+
     return this.userRepository.findBySession(session);
   }
 }

@@ -8,15 +8,15 @@ Tech stack: Spring boot, PostgreSQL, Docker
 ## TODO (with tests)
 - [ ] Register
 ```
-curl -X POST http://localhost:8080/api/auth/register -H "Content-Type: application/json" -d "{"email":"a@a.com","password":"pass"}"
+curl -X POST http://localhost:8080/api/auth/register -H "Content-Type: application/json" -d "{\"email\":\"a@a.com\",\"password\":\"pass\"}"
 ```
 - [ ] Login
 ```
-curl -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d "{"email":"a@a.com","password":"pass"}"
+curl -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"a@a.com\",\"password\":\"pass\"}"
 ```
 - [ ] Data processor
 ```
-curl -X POST http://localhost:8080/api/process -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d "{"text":"hello"}"
+curl -X POST http://localhost:8080/api/process -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d "{\"text\":\"hello\"}"
 ```
 Expected result: <code>{ "result": "transformed text" }</code>
 

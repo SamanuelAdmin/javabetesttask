@@ -47,13 +47,15 @@ public class ProcessController {
     }
 
     // check and get user
-    User user = this.authService.checkSession(token.split(" ")[1]);
-    
-    if (user == null) {
+    User user = null;
+    try {
+      user = this.authService.checkSession(token.split(" ")[1]);
+    } catch (Exception e) {
+      System.err.println(e);
       System.out.println("Authorization failed, session is incorrect".concat(token.split(" ")[1]));
       return new ResponseContract(401, "Incorrect session.");
     }
-
+    
     try {
       String processedText = processService.process(user, processEntity);
 
