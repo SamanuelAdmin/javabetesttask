@@ -6,11 +6,11 @@ Tech stack: Spring boot, PostgreSQL, Docker
 2) Passwords must be hashed; do not log secrets or tokens.
 
 ## TODO (with tests)
-- [ ] Register
+- [*] Register
 ```
 curl -X POST http://localhost:8080/api/auth/register -H "Content-Type: application/json" -d "{\"email\":\"a@a.com\",\"password\":\"pass\"}"
 ```
-- [ ] Login
+- [*] Login
 ```
 curl -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"a@a.com\",\"password\":\"pass\"}"
 ```
