@@ -76,5 +76,6 @@ public class AuthServiceImpl implements AuthService {
     Session session = this.sessionRepository.findByToken(token);
 
     // TODO: Add timestamp and exp time checker
+    return this.userRepository.findBySession(session);
   }
 }

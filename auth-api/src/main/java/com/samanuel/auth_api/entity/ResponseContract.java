@@ -5,5 +5,5 @@ import lombok.AllArgsConstructor;
 
 @Data @AllArgsConstructor public class ResponseContract {
   private Integer status;
-  private String message;
+  private String result;
 }
