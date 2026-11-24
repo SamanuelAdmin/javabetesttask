@@ -18,11 +18,12 @@ import java.net.URL;
 @Service
 public class ProcessServiceImpl implements ProcessService {
   private static String PROMPT_TEMPLATE =  "Hello, %s!\n%s";
-  private static String TARGET_URL = "http://127.0.0.1:8081/api/transform";
+  private static String TARGET_URL = System.getenv("INTERNAL_SERVICE_ENDPOINT");
 
   private String makeRequest(String prompt) throws Exception {
     // FROM https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
     // MAKE STACKOVERFLOW GREAT AGAIN
+    System.out.println(TARGET_URL);
     
     String result = null;
     HttpURLConnection connection = null;

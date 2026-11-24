@@ -14,3 +14,26 @@ services:
       timeout: 5s
       retries: 3
       start_period: 20s
+  auth-api:
+    build: ./auth-api/
+    depends_on:
+      - "database"
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - INTERNAL_TOKEN=${INTERNAL_TOKEN}
+      - INTERNAL_SERVICE_ENDPOINT=${INTERNAL_SERVICE_ENDPOINT}
+  data-api:
+    build: ./data-api/
+    depends_on:
+      - "database"
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - INTERNAL_TOKEN=${INTERNAL_TOKEN}

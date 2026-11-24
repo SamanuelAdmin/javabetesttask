@@ -39,8 +39,6 @@ public class AuthServiceImpl implements AuthService {
   public String login(AuthEntity authEntity) throws Exception {
     User user = this.userRepository.findByEmail(authEntity.getEmail());
 
-    System.out.println(user);
-    System.out.println(authEntity);
     if (!checkPassword(authEntity.getPassword(), user.getHpass())) {
       throw new Exception("Passwords didn't match");
     }
