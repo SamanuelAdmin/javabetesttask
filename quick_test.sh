@@ -10,9 +10,6 @@ sleep 15
 cd /home/user/java_test_project/auth-api
 mvn clean spring-boot:run &
 
-cd /home/user/java_test_project/data-api
-mvn clean spring-boot:run &
-
 sleep 30
 
 curl -X POST http://localhost:8080/api/auth/register -H "Content-Type: application/json" -d "{\"email\":\"a@a.com\",\"password\":\"pass\"}"
