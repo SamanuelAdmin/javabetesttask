@@ -5,6 +5,8 @@ import com.samanuel.auth_api.model.User;
 import org.springframework.stereotype.Service;
 import com.samanuel.auth_api.service.ProcessService;
 
+import org.json.simple.JSONValue;
+import org.json.simple.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -16,7 +18,7 @@ import java.net.URL;
 @Service
 public class ProcessServiceImpl implements ProcessService {
   private static String PROMPT_TEMPLATE =  "Hello, %s!\n%s";
-  private static String TARGET_URL = "http://ifconfig.me/";
+  private static String TARGET_URL = "http://127.0.0.1:8081/api/transform";
 
   private String makeRequest(String prompt) throws Exception {
     // FROM https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
@@ -29,18 +31,23 @@ public class ProcessServiceImpl implements ProcessService {
       //Create connection
       URL url = new URL(TARGET_URL);
       connection = (HttpURLConnection) url.openConnection();
-      connection.setRequestMethod("GET");
-      // connection.setRequestProperty("Content-Type", 
-      //     "application/json");
+      connection.setRequestMethod("POST");
+      connection.setRequestProperty("Content-Type", 
+          "application/json");
+      connection.setRequestProperty("X-Internal-Token", 
+          System.getenv("INTERNAL_TOKEN"));
 
       connection.setUseCaches(false);
-      // connection.setDoOutput(true);
+      connection.setDoOutput(true);
 
       //Send request
-      // DataOutputStream wr = new DataOutputStream (
-      //     connection.getOutputStream());
-      // wr.writeBytes("");
-      // wr.close();
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("text", prompt);
+
+      DataOutputStream wr = new DataOutputStream (
+          connection.getOutputStream());
+      wr.writeBytes(jsonObject.toString());
+      wr.close();
 
       int status = connection.getResponseCode();
 
@@ -65,7 +72,9 @@ public class ProcessServiceImpl implements ProcessService {
           );
       }
 
-      return response.toString();
+      // return response.toString();
+      JSONObject resObj = (JSONObject) JSONValue.parse(response.toString());
+      return (String) resObj.get("result");
     } catch (Exception e) {
       System.err.println(
           String.format("Got exception while processing: %s", e.toString())  
