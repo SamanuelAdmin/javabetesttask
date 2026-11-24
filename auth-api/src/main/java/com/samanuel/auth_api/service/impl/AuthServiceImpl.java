@@ -42,21 +42,17 @@ public class AuthServiceImpl implements AuthService {
     System.out.println(user);
     System.out.println(authEntity);
     if (!checkPassword(authEntity.getPassword(), user.getHpass())) {
-      throw new Exception("Passwords didnt match");
+      throw new Exception("Passwords didn't match");
     }
 
-    if (user.getSession() != null) {
-      return user.getSession().getToken();
-    } else {
-      Session newSession = new Session();
-      newSession.setToken(UUID.randomUUID().toString());
-      newSession.setExpiration(120);
+    Session newSession = new Session();
+    newSession.setToken(UUID.randomUUID().toString());
+    newSession.setExpiration(2 * 60 * 1000); // IN MILLISECONDS!!!!
 
-      user.setSession(newSession);
+    user.setSession(newSession);
+    this.sessionRepository.save(newSession);
 
-      this.sessionRepository.save(newSession);
-      return newSession.getToken();
-    }
+    return newSession.getToken();
   }
 
 
