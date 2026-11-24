@@ -4,6 +4,8 @@ import com.samanuel.data_api.repository.QueryRepository;
 import org.springframework.stereotype.Service;
 import com.samanuel.data_api.model.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
+
 
 
 @Service
@@ -12,8 +14,18 @@ public class MainService {
   @Autowired private QueryRepository repository;
 
   public boolean checkToken(String token) {
+    Map<String, String> env = System.getenv();
+
+    for (String envName : env.keySet()) {
+        System.out.println(envName + "=" + env.get(envName));
+    }
+
     System.out.println(token);
     System.out.println(internalToken);
+
+    if (internalToken == null) {
+      return false;
+    }
 
     return internalToken.equals(token);
   }
@@ -27,6 +39,6 @@ public class MainService {
     q.setProcessed(sbf.toString());
     this.repository.save(q);
 
-    return data.toString();
+    return sbf.toString();
   }
 }
