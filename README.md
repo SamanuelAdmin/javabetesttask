@@ -1,5 +1,6 @@
 # Java BE test task 
 Tech stack: Spring boot, PostgreSQL, Docker
+Full documentation/task description: [BE test task.pdf](https://github.com/SamanuelAdmin/javabetesttask/blob/master/BE%20test%20task.docx.pdf)
 
 ## Project "rules"
 1) Keep it simple—no need for advanced patterns. Focus on working auth, basic transform, and Docker setup.
